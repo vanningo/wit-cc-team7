@@ -38,11 +38,9 @@ aws s3 cp --recursive ~/environment/aws-modern-application-workshop/module-5/web
 
 # Demo video 
 
+https://youtu.be/7IpDgrpacYE
 
 
-Sample: https://www.youtube.com/watch?v=Pr-JMqTkdEM
-
-How to record your screen: https://www.techradar.com/how-to/record-your-screen
 ## References
 https://www.programcreek.com/python/example/103723/boto3.dynamodb.conditions.Key
 
