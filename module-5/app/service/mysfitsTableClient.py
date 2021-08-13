@@ -93,6 +93,7 @@ def queryMysfits(queryParam):
             KeyConditionExpression=Key('Status').eq("OK"), #queries all mysfits with status 'OK'
             ScanIndexForward=True) #ascends mysfits in order of likes
     
+        #below is an attempt to copy format in original querying     
      # KeyConditions={
         #     queryParam['filter']: {
         #         'AttributeValueList': [
