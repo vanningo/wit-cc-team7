@@ -330,8 +330,8 @@
 
       filterScope = $scope;
 
-      // The possible options for Mysfits to populate the dropdown filters.
-      $scope.filterOptionsList =
+    
+      $scope.filterOptionsList =         // The possible options for Mysfits to populate the dropdown filters.
        {
          "categories": [
            {
@@ -351,7 +351,7 @@
              ]
            },
             {
-             "title": "Likes",
+             "title": "Likes",          // Added filter option for likes to show it on the website
              "selections":  [
                "Highest to Lowest",
                "Lowest to Highest"
@@ -364,28 +364,9 @@
          allMysfits = getAllMysfits(applyGridScope);
        }
       
-      $scope.sortLikedMysfits = function (filterCategory, filterValue){
-        var filterCategoryQS = "Likes";
-
-        
-        
-         var mysfitsApi = mysfitsApiEndpoint + '/mysfits?' + 'filter=' + filterCategoryQS + "&value=" + filterValue;
-
-           $.ajax({
-             url : mysfitsApi,
-             type : 'GET',
-             success : function(response) {
-               applyGridScope(response.mysfits)
-             },
-             error : function(response) {
-               console.log("could not retrieve mysfits list.");
-               if (response.status == "401") {
-                  refreshAWSCredentials();
-                }
-             }
-           });
-      }
-
+      
+      
+       
        $scope.queryMysfits = function(filterCategory, filterValue) {
 
            var filterCategoryQS = "";
@@ -393,20 +374,14 @@
              filterCategoryQS = "GoodEvil";
            } else if (filterCategory==="Lawful/Chaotic"){
              filterCategoryQS = "LawChaos";
-           }  else{
-             filterCategoryQS = "";
-           }
-          // else if (filterCategory ==="Likes"){
-          //   //item["Likes"].sort()
-          //     filterCategoryQS="Likes"
-
-              
+           } 
+          else if (filterCategory ==="Likes"){              // elif statement when calling querymisfits for retrieving sorted likes
+            
+              filterCategoryQS === "Likes" //queries likes, sets filter as likes
              
-          //     //item["Likes"].sort()
-          //     //filterCategoryQS === item["Likes"].sort()
-          //   }
-          
-            //how does it know the filter value?
+              
+              
+            }
            
            var mysfitsApi = mysfitsApiEndpoint + '/mysfits?' + 'filter=' + filterCategoryQS + "&value=" + filterValue;
 
@@ -455,11 +430,13 @@
 
     });
 
+
     /*
-      A new event handling funciton if the profile modal is triggered,
+      A new event handling function. If the profile modal is triggered,
       to record that click event and sent it to our new streaming service
       backend.
     */
+    
     $('#profileModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget);
       var mysfitId = button.data('mysfitid');
@@ -619,22 +596,22 @@
   */
   function recordProfileClick(clickedMysfitId) {
 
-    var clicksApi = streamingApiEndpoint + '/clicks';
+    var clicksApi = streamingApiEndpoint + '/clicks';      // sets API for our click tracking
     var userClick;
 
-    currentUserId = localStorage.getItem('userId');
+    currentUserId = localStorage.getItem('userId');       // gets UserID, if there is none, they are a guest
     if (currentUserId == null) {
       currentUserId = 'guest';
     }
 
-    userClick = {
+    userClick = {                                         // defines userclick as the userID and clicked mysfits
       userId: currentUserId,
       mysfitId: clickedMysfitId
     }
 
     console.log('Recording profile click: ' + userClick);
 
-    $.ajax({
+    $.ajax({                                              
       url : clicksApi,
       type : 'PUT',
       headers : {'Content-Type': 'application/json'},
