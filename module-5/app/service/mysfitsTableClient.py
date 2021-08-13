@@ -38,8 +38,6 @@ def getAllMysfits():
         mysfit["name"] = item["Name"]["S"]
         mysfit["goodevil"] = item["GoodEvil"]["S"]
         mysfit["lawchaos"] = item["LawChaos"]["S"]
-        #delete below line if necessary
-        mysfit["likes"] = item["Likes"]["N"]
         mysfit["species"] = item["Species"]["S"]
         mysfit["thumbImageUri"] = item["ThumbImageUri"]["S"]
         mysfitList["mysfits"].append(mysfit)
@@ -48,6 +46,12 @@ def getAllMysfits():
     return json.dumps(mysfitList)
 
 def queryMysfits(queryParam):
+
+    logging.info(json.dumps(queryParam))
+
+    # Use the DynamoDB API Query to retrieve mysfits from the table that are
+    # equal to the selected filter values.
+   def queryMysfits(queryParam):
 
     logging.info(json.dumps(queryParam))
 
@@ -70,45 +74,24 @@ def queryMysfits(queryParam):
             }
         }
     )
-    
-    elif queryParam['filter'] == 'Status':
+    #when 'Likes' is selected
+    elif queryParam['filter'] == 'Likes':
+        
         if queryParam['value'] == 'Highest to Lowest':
+            
             response = table.query( 
             TableName="MysfitsTable",
-            IndexName="Status-Likes-index",
-            KeyConditionExpression=Key('Status').eq("OK"),
-            ScanIndexForward=False)
-    #         response = client.query( 
-    #         TableName="MysfitsTable",
-    #         IndexName="Status-Likes-index",
-    #         KeyConditionExpression=Key('Status').eq("OK"),
-    #         KeyConditions={
-    #             queryParam['filter']: {
-    #                 'AttributeValueList': [
-    #                     {
-    #                         'S' : "Status"
-    #                     }
-    #                 ],
-    #                 'ComparisonOperator': "EQ"
-    #           # 'ScanIndexForward': "False"
-    #         }
-    #     },
-    #         ScanIndexForward=False,
-    # )
-            # response = table.query( 
-            # TableName="MysfitsTable",
-            # IndexName="Status-Likes-index",
-            # KeyConditionExpression=Key('Status').eq("OK"),
-            # ScanIndexForward=False)
-            
+            IndexName="Status-Likes-index", #created index via DynamoDB
+            KeyConditionExpression=Key('Status').eq("OK"), #queries all mysfits with status 'OK'
+            ScanIndexForward=False) #descends mysfits in order of likes
+    
         elif queryParam['value'] == 'Lowest to Highest':
             
             response = table.query( 
             TableName="MysfitsTable",
-            IndexName="Status-Likes-index",
-            KeyConditionExpression=Key('Status').eq("OK"),
-            ScanIndexForward=True)
-                                                         
+            IndexName="Status-Likes-index", #created index via DynamoDB
+            KeyConditionExpression=Key('Status').eq("OK"), #queries all mysfits with status 'OK'
+            ScanIndexForward=True) #ascends mysfits in order of likes
     
      # KeyConditions={
         #     queryParam['filter']: {
@@ -131,6 +114,18 @@ def queryMysfits(queryParam):
         mysfit["species"] = item["Species"]["S"]
         #below line is new, delete if necessary
         mysfit["likes"] = item["Likes"]["N"]
+        mysfit["thumbImageUri"] = item["ThumbImageUri"]["S"]
+        mysfitList["mysfits"].append(mysfit)
+
+    return json.dumps(mysfitList)
+
+    for item in response["Items"]:
+        mysfit = {}
+        mysfit["mysfitId"] = item["MysfitId"]["S"]
+        mysfit["name"] = item["Name"]["S"]
+        mysfit["goodevil"] = item["GoodEvil"]["S"]
+        mysfit["lawchaos"] = item["LawChaos"]["S"]
+        mysfit["species"] = item["Species"]["S"]
         mysfit["thumbImageUri"] = item["ThumbImageUri"]["S"]
         mysfitList["mysfits"].append(mysfit)
 
@@ -190,16 +185,33 @@ def likeMysfit(mysfitId):
     return json.dumps(response)
 
 
-# attempt to sort mysfits by likes
-def sortLikedMysfits():
-  
-    response = table.query( 
-        TableName="MysfitsTable",
-        IndexName="Status-Likes-index",
-       KeyConditionExpression=Key('Status').eq("OK"),
-        ScanIndexForward=False,
+# Below is our attempt to sort mysfits by likes. Commented out in case it negatively affects other parts of the code.
+# We ran this in a separate file and it worked, we just couldnt get this to play nice with the API.
+
+
+# def sortLikedMysfits(mysfitId):
     
-)
+#     logging.info(json.dumps(queryParam))
+    
+#     response = client.query(   
+#         TableName = "MysfitsTable",
+#         # Key={
+#         #         'MysfitId': {
+#         #             'S': mysfitId
+#         #         }
+#         #     },
+#         # ScanIndexForward = False,
+#         IndexName=queryParam['filter']+'Index',
+#         KeyConditions={
+#             queryParam['filter']: {
+#                 'AttributeValueList': [
+#                     {
+#                         'S': queryParam['value']
+#                     }
+#                 ],
+#         ScanIndexForward = False,
+#             }
+#     )
     
   
 # mark a mysfit as adopted
