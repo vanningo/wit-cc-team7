@@ -36,6 +36,10 @@ aws s3 cp --recursive ~/environment/aws-modern-application-workshop/module-5/web
 8. Create sort-key in DynamoDB and add a new field to the table called "Status" and set it to "OK" for every Mysfit
 
 **Please refer to the databasesorttest.py file to see the sorting work.**
+1. Create a sort-key named 'Status-Likes-index' with a new field 'Status' and sort field 'Likes'
+2. Set every mysfit Status field to 'OK'
+
+
 # Demo video 
 
 https://youtu.be/7IpDgrpacYE
