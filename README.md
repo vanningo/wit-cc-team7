@@ -27,7 +27,7 @@ Mythical Mysfits is a pet adoption website dedicated to fictional creatures. We'
 ```
 aws s3 mb s3://REPLACE_ME_BUCKET_NAME
 ```
-6. Deploy all files in /aws-modern-application-workshop/module-3/web with this command:
+6. Deploy all files in /aws-modern-application-workshop/module-5/web with this command:
 
 ```
 aws s3 cp --recursive ~/environment/aws-modern-application-workshop/module-5/web/ s3://REPLACE_ME_BUCKET_NAME
@@ -35,7 +35,7 @@ aws s3 cp --recursive ~/environment/aws-modern-application-workshop/module-5/web
 7. Update S3 bucket policy and visit your website to see the changes
 8. Create sort-key in DynamoDB and add a new field to the table called "Status" and set it to "OK" for every Mysfit
 
-
+**Please refer to the databasesorttest.py file to see the sorting work.**
 # Demo video 
 
 https://youtu.be/7IpDgrpacYE
